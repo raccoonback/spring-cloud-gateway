@@ -34,7 +34,7 @@ class BeforeFilterFunctionsTests {
 	@Test
 	void setPath() {
 		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/legacy/path")
-				.buildRequest(null);
+			.buildRequest(null);
 
 		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
 
@@ -46,7 +46,7 @@ class BeforeFilterFunctionsTests {
 	@Test
 	void setEncodedPath() {
 		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/legacy/path")
-				.buildRequest(null);
+			.buildRequest(null);
 
 		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
 
@@ -58,8 +58,8 @@ class BeforeFilterFunctionsTests {
 	@Test
 	void setPathWithParameters() {
 		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/legacy/path")
-				.queryParam("foo", "bar")
-				.buildRequest(null);
+			.queryParam("foo", "bar")
+			.buildRequest(null);
 
 		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
 
@@ -71,8 +71,8 @@ class BeforeFilterFunctionsTests {
 	@Test
 	void setPathWithEncodedParameters() {
 		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/legacy/path")
-				.queryParam("foo[]", "bar[]")
-				.buildRequest(null);
+			.queryParam("foo[]", "bar[]")
+			.buildRequest(null);
 
 		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
 
@@ -82,9 +82,71 @@ class BeforeFilterFunctionsTests {
 	}
 
 	@Test
+	void removeRequestParameter() {
+		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/path")
+			.queryParam("foo", "bar")
+			.queryParam("baz", "qux")
+			.buildRequest(null);
+
+		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
+
+		ServerRequest result = BeforeFilterFunctions.removeRequestParameter("foo").apply(request);
+
+		assertThat(result.param("foo")).isEmpty();
+		assertThat(result.param("baz")).isPresent().hasValue("qux");
+		assertThat(result.uri().toString()).isEqualTo("http://localhost/path?baz=qux");
+	}
+
+	@Test
+	void removeEncodedRequestParameter() {
+		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/path")
+			.queryParam("foo[]", "bar")
+			.queryParam("baz", "qux")
+			.buildRequest(null);
+
+		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
+
+		ServerRequest result = BeforeFilterFunctions.removeRequestParameter("foo[]").apply(request);
+
+		assertThat(result.param("foo[]")).isEmpty();
+		assertThat(result.param("baz")).isPresent().hasValue("qux");
+		assertThat(result.uri().toString()).isEqualTo("http://localhost/path?baz=qux");
+	}
+
+	@Test
+	void removeRequestParameterWithEncodedRemainParameters() {
+		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/path")
+			.queryParam("foo", "bar")
+			.queryParam("baz[]", "qux[]")
+			.buildRequest(null);
+
+		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
+
+		ServerRequest result = BeforeFilterFunctions.removeRequestParameter("foo").apply(request);
+
+		assertThat(result.param("foo")).isEmpty();
+		assertThat(result.param("baz[]")).isPresent().hasValue("qux[]");
+		assertThat(result.uri().toString()).isEqualTo("http://localhost/path?baz%5B%5D=qux%5B%5D");
+	}
+
+	@Test
+	void removeRequestParameterWithEncodedPath() {
+		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/é")
+			.queryParam("foo", "bar")
+			.buildRequest(null);
+
+		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
+
+		ServerRequest result = BeforeFilterFunctions.removeRequestParameter("foo").apply(request);
+
+		assertThat(result.param("foo")).isEmpty();
+		assertThat(result.uri().toString()).isEqualTo("http://localhost/%C3%A9");
+	}
+
+	@Test
 	void stripPrefix() {
 		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/depth1/depth2/depth3")
-				.buildRequest(null);
+			.buildRequest(null);
 
 		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
 
@@ -96,7 +158,7 @@ class BeforeFilterFunctionsTests {
 	@Test
 	void stripPrefixWithEncodedPath() {
 		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/depth1/depth2/depth3/é")
-				.buildRequest(null);
+			.buildRequest(null);
 
 		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
 
@@ -108,8 +170,8 @@ class BeforeFilterFunctionsTests {
 	@Test
 	void stripPrefixWithEncodedParameters() {
 		MockHttpServletRequest servletRequest = MockMvcRequestBuilders.get("http://localhost/depth1/depth2/depth3")
-				.queryParam("baz[]", "qux[]")
-				.buildRequest(null);
+			.queryParam("baz[]", "qux[]")
+			.buildRequest(null);
 
 		ServerRequest request = ServerRequest.create(servletRequest, Collections.emptyList());
 
@@ -118,4 +180,5 @@ class BeforeFilterFunctionsTests {
 		assertThat(result.param("baz[]")).isPresent().hasValue("qux[]");
 		assertThat(result.uri().toString()).isEqualTo("http://localhost/depth3?baz%5B%5D=qux%5B%5D");
 	}
+
 }
