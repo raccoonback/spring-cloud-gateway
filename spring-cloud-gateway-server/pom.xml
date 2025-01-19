@@ -228,6 +228,14 @@
 			<artifactId>spring-core-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -316,19 +324,19 @@
 		</plugins>
 	</build>
 	<profiles>
-		<profile>
-			<id>java17</id>
-			<activation>
-				<jdk>[17,18)</jdk>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>io.projectreactor.tools</groupId>
-					<artifactId>blockhound-junit-platform</artifactId>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
-		</profile>
+<!--		<profile>-->
+<!--			<id>java17</id>-->
+<!--			<activation>-->
+<!--				<jdk>[17,18)</jdk>-->
+<!--			</activation>-->
+<!--			<dependencies>-->
+<!--				<dependency>-->
+<!--					<groupId>io.projectreactor.tools</groupId>-->
+<!--					<artifactId>blockhound-junit-platform</artifactId>-->
+<!--					<scope>test</scope>-->
+<!--				</dependency>-->
+<!--			</dependencies>-->
+<!--		</profile>-->
 		<profile>
 			<id>java13plus</id>
 			<activation>

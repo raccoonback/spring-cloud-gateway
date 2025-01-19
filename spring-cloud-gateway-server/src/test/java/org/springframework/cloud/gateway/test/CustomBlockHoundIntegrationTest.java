@@ -16,25 +16,46 @@
 
 package org.springframework.cloud.gateway.test;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledForJreRange;
-import org.junit.jupiter.api.condition.JRE;
-import reactor.core.publisher.Mono;
+import reactor.blockhound.BlockHound;
+import reactor.blockhound.BlockingOperationError;
 import reactor.core.scheduler.Schedulers;
 
 /**
  * @author Tim Ysewyn
  */
-public class CustomBlockHoundIntegrationTest {
+class CustomBlockHoundIntegrationTest {
+
+	@BeforeEach
+	void setUp() {
+		System.out.println("[CustomBlockHoundIntegrationTest] started");
+		BlockHound.install();
+		System.out.println("[CustomBlockHoundIntegrationTest] finished");
+	}
 
 	@Test
-	@DisabledForJreRange(min = JRE.JAVA_16)
-	public void shouldThrowErrorForBlockingCallWithCustomBlockHoundIntegration() {
-		Assertions.assertThrows(RuntimeException.class, () -> Mono.fromCallable(() -> {
-			Thread.sleep(1);
-			return null;
-		}).subscribeOn(Schedulers.parallel()).block());
+	void shouldThrowErrorForBlockingCallWithCustomBlockHoundIntegration()
+			throws InterruptedException, TimeoutException {
+		try {
+			FutureTask<?> task = new FutureTask<>(() -> {
+				Thread.sleep(0);
+				return "";
+			});
+			Schedulers.parallel().schedule(task);
+
+			task.get(10, TimeUnit.SECONDS);
+			Assertions.fail("should fail");
+		}
+		catch (ExecutionException e) {
+			Assertions.assertTrue(e.getCause() instanceof BlockingOperationError);
+		}
 	}
 
 }
