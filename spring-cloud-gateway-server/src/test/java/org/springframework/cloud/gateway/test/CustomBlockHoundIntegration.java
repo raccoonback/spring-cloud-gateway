@@ -33,7 +33,7 @@ public class CustomBlockHoundIntegration implements BlockHoundIntegration {
 		// });
 
 		// Uses Unsafe#park
-		builder.allowBlockingCallsInside("reactor.core.scheduler.SchedulerTask", "dispose");
+//		builder.allowBlockingCallsInside("reactor.core.scheduler.SchedulerTask", "dispose");
 
 		// Uses
 		// ch.qos.logback.classic.spi.PackagingDataCalculator#getImplementationVersion
