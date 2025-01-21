@@ -16,23 +16,33 @@
 
 package org.springframework.cloud.gateway.config;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.platform.launcher.TestExecutionListener;
+import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import reactor.blockhound.BlockHound;
 
+
 public class BlockHoundTestExecutionListener implements TestExecutionListener {
 
-	static {
+	private static final Log log = LogFactory.getLog(BlockHoundTestExecutionListener.class);
+
+	@Override
+	public void executionStarted(TestIdentifier testIdentifier) {
+
+		log.info("[TestExecutionListener] executionStarted");
+
 		BlockHound.install();
 	}
 
 	@Override
 	public void testPlanExecutionStarted(TestPlan testPlan) {
-		System.out.println("[TestExecutionListener] started");
+		log.info("[TestExecutionListener] started");
 	}
 
 	@Override
 	public void testPlanExecutionFinished(TestPlan testPlan) {
-		System.out.println("[TestExecutionListener] finished");
+		log.info("[TestExecutionListener] finished");
 	}
 }

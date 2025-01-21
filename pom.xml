@@ -112,11 +112,11 @@
 				<artifactId>blockhound</artifactId>
 				<version>${blockhound.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>io.projectreactor.tools</groupId>
-				<artifactId>blockhound-junit-platform</artifactId>
-				<version>${blockhound.version}</version>
-			</dependency>
+<!--			<dependency>-->
+<!--				<groupId>io.projectreactor.tools</groupId>-->
+<!--				<artifactId>blockhound-junit-platform</artifactId>-->
+<!--				<version>${blockhound.version}</version>-->
+<!--			</dependency>-->
 			<dependency>
 				<groupId>org.junit-pioneer</groupId>
 				<artifactId>junit-pioneer</artifactId>
