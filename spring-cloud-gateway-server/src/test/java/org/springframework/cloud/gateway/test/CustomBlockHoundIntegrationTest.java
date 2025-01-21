@@ -33,9 +33,7 @@ class CustomBlockHoundIntegrationTest {
 
 //	@BeforeEach
 //	void setUp() {
-//		System.out.println("[CustomBlockHoundIntegrationTest] started");
 //		BlockHound.install();
-//		System.out.println("[CustomBlockHoundIntegrationTest] finished");
 //	}
 
 	@Test
