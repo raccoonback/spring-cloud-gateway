@@ -22,9 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reactor.blockhound.BlockHound;
 import reactor.blockhound.BlockingOperationError;
 import reactor.core.scheduler.Schedulers;
 
@@ -33,12 +31,12 @@ import reactor.core.scheduler.Schedulers;
  */
 class CustomBlockHoundIntegrationTest {
 
-	@BeforeEach
-	void setUp() {
-		System.out.println("[CustomBlockHoundIntegrationTest] started");
-		BlockHound.install();
-		System.out.println("[CustomBlockHoundIntegrationTest] finished");
-	}
+//	@BeforeEach
+//	void setUp() {
+//		System.out.println("[CustomBlockHoundIntegrationTest] started");
+//		BlockHound.install();
+//		System.out.println("[CustomBlockHoundIntegrationTest] finished");
+//	}
 
 	@Test
 	void shouldThrowErrorForBlockingCallWithCustomBlockHoundIntegration()
