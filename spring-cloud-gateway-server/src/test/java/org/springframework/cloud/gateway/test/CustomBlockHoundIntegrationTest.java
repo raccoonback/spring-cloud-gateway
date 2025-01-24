@@ -21,23 +21,18 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import reactor.blockhound.BlockHound;
 import reactor.blockhound.BlockingOperationError;
 import reactor.core.scheduler.Schedulers;
-
-import org.springframework.cloud.gateway.config.GlobalTestExtension;
 
 /**
  * @author Tim Ysewyn
  */
-@ExtendWith(GlobalTestExtension.class)
+//@ExtendWith(GlobalTestExtension.class)
 class CustomBlockHoundIntegrationTest {
 
-	private static final Log log = LogFactory.getLog(CustomBlockHoundIntegrationTest.class);
 
 //	@BeforeEach
 //	void setUp() {
@@ -47,7 +42,8 @@ class CustomBlockHoundIntegrationTest {
 	@Test
 	void shouldThrowErrorForBlockingCallWithCustomBlockHoundIntegration()
 			throws InterruptedException, TimeoutException {
-		log.info("[TEST] koko");
+
+		BlockHound.install();
 
 
 //		ServiceLoader<TestExecutionListener> loader = ServiceLoader.load(TestExecutionListener.class);
